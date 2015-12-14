@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Détails Enveloppe</string>
+    <string name="txtBtnEnvoyer">ENVOYER</string>
+    <string name="txtEditCode">Code de l\'enveloppe...</string>
+    <string name="txtViewCode">Default</string>
+    <string name="defString">Default</string>
+
+    <string name="lost_connection">Lost connection.</string>
+    <string name="wifi_connected">Wi-Fi reconnected.</string>
+    <string name="connection_error">Unable to load content. Check your network connection.</string>
+    <string name="xml_error">Error parsing XML.</string>
+
+</resources>
