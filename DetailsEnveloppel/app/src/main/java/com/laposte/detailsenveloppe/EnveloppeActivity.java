@@ -32,12 +32,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 public class EnveloppeActivity extends Activity {
     private static final String URI =
-            "192.168.42.1/req.php?id=clean";  //changer pour le url du serveur rapsberryPi
-
-    TextView txtCodeEnv, txtIsConnected;
+            "http://192.168.42.1/req.php?id=";  //changer pour le url du serveur rapsberryPi
+    private static String get;
 
     //Table columns
     TextView tableIDTitre, tableFormatTitre, tableEtatTitre, tablePriorTitre,                   //Titre
@@ -57,9 +57,6 @@ public class EnveloppeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enveloppe);
-
-        txtCodeEnv = (TextView) findViewById(R.id.txtCode);
-        txtIsConnected = (TextView) findViewById(R.id.txtViewConnection);
 
         //Titre
         tableIDTitre = (TextView) findViewById(R.id.tableIDTitre);
@@ -94,60 +91,39 @@ public class EnveloppeActivity extends Activity {
         // Recevoir le code de l'enveloppe
         Intent i = getIntent();
         String code = i.getStringExtra("code");
-        txtCodeEnv.setText(code);
-        Toast.makeText(getApplicationContext(), code, Toast.LENGTH_SHORT).show();
+
+        get = URI+code;
+
+        Toast.makeText(getApplicationContext(), get, Toast.LENGTH_SHORT).show();
 
         enveloppe = null;
 
         if (isConnected()) {
-            txtIsConnected.setText("Vous êtes connecté");
 
-            new DownloadXmlTask().execute(URI);
+            new DownloadXmlTask().execute(get);
 
         } else {
-            txtIsConnected.setText("Vous n'êtes pas connecté !");
+            Toast.makeText(getApplicationContext(), "Pas de connexion", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
-    private String downloadContent(String myurl) throws IOException {
+
+    private InputStream downloadContent(String myurl) throws IOException {
         InputStream is = null;
-        int length = 500;
 
         try {
             URL url = new URL(myurl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            Log.e("HTTP: ", "message");
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            Log.e("HTTP: ", "connect");
-            int response = conn.getResponseCode();
-            Log.d("TAG", "The response is: " + response);
-            is = conn.getInputStream();
-            Log.e("HTTP: ", "input");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(10000);
+            is = new BufferedInputStream(urlConnection.getInputStream());
 
-            // Convert the InputStream into a string
-            String contentAsString = convertInputStreamToString(is, length);
-
-            Toast.makeText(getApplicationContext(), contentAsString, Toast.LENGTH_LONG).show();
-
-            Log.e("HTTP: ", "string");
-            return contentAsString;
-        } finally {
-            if (is != null) {
-                is.close();
-            }
+        } catch (IOException e) {
+            Log.e("enull:", e.getMessage());
         }
+        return is;
     }
 
-    public String convertInputStreamToString(InputStream stream, int length) throws IOException, UnsupportedEncodingException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[length];
-        reader.read(buffer);
-        return new String(buffer);
-    }
 
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
@@ -159,28 +135,30 @@ public class EnveloppeActivity extends Activity {
     }
 
     // Implementation of AsyncTask used to download XML feed from raspberryPi server
-    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
+    private class DownloadXmlTask extends AsyncTask<String, Void, InputStream> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected InputStream doInBackground(String... params) {
             //do your request in here so that you don't interrupt the UI thread
             try {
                 return downloadContent(params[0]);
             } catch (IOException e) {
-                return "Unable to retrieve data. URL may be invalid.";
+                Log.e("enull: ", e.getMessage());
+                return null;
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(InputStream result) {
             //Here you are done with the task
-            Toast.makeText(EnveloppeActivity.this, result, Toast.LENGTH_LONG).show();
             try {
                 XMLEnveloppeParser parser = new XMLEnveloppeParser();
-                InputStream is = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+                enveloppe = parser.parse(result);
 
-                enveloppe = parser.parse(is);
+                if(enveloppe.getTitre().getId() == null){
+                    Toast.makeText(getApplicationContext(), "Enveloppe 404", Toast.LENGTH_LONG).show();
+                    finish();
+                }
 
                 titre = enveloppe.getTitre();
                 adresse = enveloppe.getAdresse();

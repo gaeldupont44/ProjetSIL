@@ -9,31 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".EnveloppeActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txtViewCode"
-        android:id="@+id/txtCode"
-        android:textSize="18sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txtViewCode"
-        android:id="@+id/txtViewConnection"
-        android:textSize="18sp"
-        android:layout_below="@+id/txtCode"
-        android:layout_alignLeft="@+id/txtCode"
-        android:layout_alignStart="@+id/txtCode" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        android:layout_weight="1"
-        android:layout_below="@+id/txtViewConnection">
+        android:layout_weight="1">
 
         <TableLayout
             android:layout_width="fill_parent"
