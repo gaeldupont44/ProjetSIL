@@ -33,5 +33,13 @@ public class Enveloppe {
     public Adresse getAdresse() { return adresse; }
     public void setAdresse(Adresse adresse) { this.adresse = adresse; }
 
-
+    @Override
+    public String toString() {
+        return "Enveloppe{" +
+                "titre=" + titre +
+                ", traitement=" + traitement +
+                ", client=" + client +
+                ", adresse=" + adresse +
+                '}';
+    }
 }

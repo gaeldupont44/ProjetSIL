@@ -33,4 +33,14 @@ public class Titre {
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+
+    @Override
+    public String toString() {
+        return "Titre{" +
+                "id='" + id + '\'' +
+                ", format='" + format + '\'' +
+                ", etat='" + etat + '\'' +
+                ", priorite='" + priorite + '\'' +
+                '}';
+    }
 }

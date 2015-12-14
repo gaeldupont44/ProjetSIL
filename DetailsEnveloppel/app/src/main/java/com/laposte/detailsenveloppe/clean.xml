@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<enveloppe>
+  <titre>
+    <format>GF</format>
+    <etat>VIDEOCODEE</etat>
+    <priorite>Non urgent</priorite>
+    <id>E2AB54B19F95BC1</id>
+  </titre>
+  <traitement>
+    <datedebut>2015-10-22T09:50:40.568Z</datedebut>
+    <idmachinetri/>
+    <idplateforme>A08870</idplateforme>
+    <etat>VIDEOCODEE</etat>
+  </traitement>
+  <client>
+    <configentreemachine>1</configentreemachine>
+    <z1interdit>1</z1interdit>
+    <z2interdit>1</z2interdit>
+    <dateautomatique>2015-10-22T09:50:43.568Z</dateautomatique>
+    <datetotal>2015-10-22T09:55:20.568Z</datetotal>
+    <suretemarquage>100</suretemarquage>
+    <prisemultiple>0</prisemultiple>
+  </client>
+  <adresse>
+    <cp>0</cp>
+    <commune>0</commune>
+    <typevoie1>0</typevoie1>
+    <libellevoie1>0</libellevoie1>
+    <numvoie1>0</numvoie1>
+    <typeseparationcedex>0</typeseparationcedex>
+    <numseparationcedex>0</numseparationcedex>
+  </adresse>
+</enveloppe>

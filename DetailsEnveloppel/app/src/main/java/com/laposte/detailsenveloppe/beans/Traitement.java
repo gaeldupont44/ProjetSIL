@@ -33,4 +33,14 @@ public class Traitement {
 
     public String getEtat() { return etat; }
     public void setEtat(String etat) { this.etat = etat; }
+
+    @Override
+    public String toString() {
+        return "Traitement{" +
+                "datedebut='" + datedebut + '\'' +
+                ", idMachineTri='" + idMachineTri + '\'' +
+                ", idPlateforme='" + idPlateforme + '\'' +
+                ", etat='" + etat + '\'' +
+                '}';
+    }
 }

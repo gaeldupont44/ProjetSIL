@@ -1,5 +1,6 @@
 package com.laposte.detailsenveloppe.com.laposte.detailsenveloppe.traitementXML;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.laposte.detailsenveloppe.beans.Adresse;
@@ -70,35 +71,81 @@ public class XMLEnveloppeParser {
                         if (tagname.equalsIgnoreCase("enveloppe")) {
                             // create a new instance of enveloppe
                             enveloppe = new Enveloppe();
+                        } else if (tagname.equalsIgnoreCase("titre")) {
+                            titre = new Titre();
+                        } else if (tagname.equalsIgnoreCase("traitement")) {
+                            traitement = new Traitement();
+                        } else if (tagname.equalsIgnoreCase("client")) {
+                            client = new Client();
+                        } else if (tagname.equalsIgnoreCase("adresse")) {
+                            adresse = new Adresse();
                         }
+
                         break;
 
                     case XmlPullParser.TEXT:
-                        text = parser.getText();
+                            text = parser.getText();
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (tagname.equalsIgnoreCase("titre")) {
-                            // ajout object titre à l'enveloppe
+//                        if (tagname.equalsIgnoreCase("titre")) {
+                            if (tagname.equalsIgnoreCase("format")) {
+                                titre.setFormat(text);
+                            } else if (tagname.equalsIgnoreCase("titreetat")){
+                                titre.setEtat(text);
+                            } else if (tagname.equalsIgnoreCase("priorite")){
+                                titre.setPriorite(text);
+                            } else if (tagname.equalsIgnoreCase("titreid")){
+                                titre.setId(text);
+                            }
 
-
-                            enveloppe.setTitre(titre);
-                        } else if (tagname.equalsIgnoreCase("traitement")) {
+//                        } else if (tagname.equalsIgnoreCase("traitement")) {
                             // ajout object traitement à l'enveloppe
+                            if (tagname.equalsIgnoreCase("datedebut")){
+                                traitement.setDatedebut(text);
+                            } else if (tagname.equalsIgnoreCase("idmachinetri")){
+                                traitement.setIdMachineTri(text);
+                            } else if (tagname.equalsIgnoreCase("idplateforme")){
+                                traitement.setIdPlateforme(text);
+                            } else if (tagname.equalsIgnoreCase("traitementetat")){
+                                traitement.setEtat(text);
+                            }
 
+//                        } else if (tagname.equalsIgnoreCase("client")) {
+                            if (tagname.equalsIgnoreCase("configentreemachine")){
+                                client.setConfigEntreeMachine(text);
+                            } else if (tagname.equalsIgnoreCase("z1interdit")) {
+                                client.setZ1Interdit(text);
+                            } else if (tagname.equalsIgnoreCase("z2interdit")) {
+                                client.setZ2Interdit(text);
+                            } else if (tagname.equalsIgnoreCase("dateautomatique")) {
+                                client.setDateAutomatique(text);
+                            } else if (tagname.equalsIgnoreCase("datetotal")) {
+                                client.setDateTotal(text);
+                            } else if (tagname.equalsIgnoreCase("suretemarquage")) {
+                                client.setSureteMarquage(text);
+                            } else if (tagname.equalsIgnoreCase("prisemultiple")) {
+                                client.setPriseMultiple(text);
+                            }
 
-                            enveloppe.setTraitement(traitement);
-                        } else if (tagname.equalsIgnoreCase("client")) {
-                            // ajout object client à l'enveloppe
+//                        } else if (tagname.equalsIgnoreCase("adresse")) {
+                            if (tagname.equalsIgnoreCase("cp")){
+                                adresse.setCP(text);
+                            } else if (tagname.equalsIgnoreCase("commune")) {
+                                adresse.setCommune(text);
+                            } else if (tagname.equalsIgnoreCase("typevoie1")) {
+                                adresse.setTypeVoie1(text);
+                            } else if (tagname.equalsIgnoreCase("libellevoie1")) {
+                                adresse.setLibelleVoie1(text);
+                            } else if (tagname.equalsIgnoreCase("numvoie1")) {
+                                adresse.setNumVoie1(text);
+                            } else if (tagname.equalsIgnoreCase("typeseparationcedex")) {
+                                adresse.setTypeSeparationCedex(text);
+                            } else if (tagname.equalsIgnoreCase("numseparationcedex")) {
+                                adresse.setNumSeparationCedex(text);
+                            }
 
-
-                            enveloppe.setClient(client);
-                        } else if (tagname.equalsIgnoreCase("adresse")) {
-                            // ajout object adresse à l'enveloppe
-
-
-                            enveloppe.setAdresse(adresse);
-                        }
+//                        }
                         break;
 
                     default:
@@ -107,12 +154,19 @@ public class XMLEnveloppeParser {
                 eventType = parser.next();
             }
 
+            //Construire l'objet enveloppe
+            enveloppe.setTitre(titre);
+            enveloppe.setTraitement(traitement);
+            enveloppe.setClient(client);
+            enveloppe.setAdresse(adresse);
+
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e("Error: ", e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Error: ", e.getMessage());
         }
 
+        Log.e("Enveloppe: ", enveloppe.toString());
         return enveloppe;
     }
 }

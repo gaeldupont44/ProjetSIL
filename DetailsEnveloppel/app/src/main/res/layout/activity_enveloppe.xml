@@ -203,21 +203,6 @@
             <TableRow>
                 <TextView
                     android:padding="5dip"
-                    android:text="Date debut"
-                    android:layout_column="0"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:id="@+id/tableDateDebClient"
-                    android:padding="5dip"
-                    android:text="@string/defString"
-                    android:layout_column="0"
-                    android:gravity="center"/>
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:padding="5dip"
                     android:text="Config Entree Machine"
                     android:layout_column="0"
                     android:gravity="center"/>
